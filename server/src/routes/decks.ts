@@ -1,10 +1,9 @@
 import express from "express";
 const router = express.Router();
-import { getCards, postCard } from "../controllers/cards";
-
+import { getDecks, postDeck } from "../controllers/decks";
 
 router.route("/")
-  .get(getCards)
-  .post(postCard);
+  .get(getDecks)
+  .post(postDeck);
 
 export default router;
