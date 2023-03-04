@@ -5,8 +5,16 @@ const DeckSchema = new mongoose.Schema({
     type: String,
     minlength: 1,
     maxlength: 100,
-    required: true
+    required: true,
+  },
+  createdBy: {
+    type: String,
+    required: true,
+    unique: true
   }
+}, {
+  timestamps: true,
+  
 })
 
 const Deck = mongoose.model("Deck", DeckSchema);
