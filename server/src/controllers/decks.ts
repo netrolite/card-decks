@@ -16,8 +16,6 @@ export async function deleteDeck(req: Request, res: Response) {
   const { deckId } = req.params;
   const result = await Deck.deleteOne({ _id: deckId });
 
-  throw new Error("my err")
-
   if (result.deletedCount === 0) {
     throw new NotFoundErr("deck not found");
   }
