@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequestErr, TApiErrors, statuses } from "./errors";
-import ApiErr from "./errors/ApiErr";
+import { TApiErrors } from "../utils/errors";
+import ApiErr from "../utils/errors/ApiErr";
 import { MongoError } from "mongodb";
 
 interface IDuplicateErr {

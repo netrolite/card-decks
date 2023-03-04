@@ -6,7 +6,7 @@ import corsConfig from "./config/cors";
 import express from "express";
 import connectDB from "./utils/connectDB";
 import decksRoute from "./routes/decks";
-import errHandler from "./utils/errHandler";
+import errHandler from "./middleware/errHandler";
 const app = express();
 
 
