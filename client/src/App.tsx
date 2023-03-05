@@ -44,27 +44,31 @@ const App = () => {
           className="add-deck-form"
           onSubmit={handleFormSubmit}
         >
-          <label htmlFor="deck-name">Deck name</label>
-          <input
-           type="text"
-           name="deck-name"
-           id="deck-name"
-           data-prop="name"
-           value={deckToPost.name}
-           onChange={handleDeckToPostChange}
-           ref={deckNameRef}
-           />
-
-          <label htmlFor="deck-name">Your name</label>
-          <input
-           type="text"
-           name="deck-name"
-           id="deck-name"
-           data-prop="createdBy"
-           value={deckToPost.createdBy}
-           onChange={handleDeckToPostChange}
-           ref={createdByRef}
-           />
+          <div className="input-group">
+            <label htmlFor="deck-name">Deck name</label>
+            <input
+              type="text"
+              name="deck-name"
+              id="deck-name"
+              data-prop="name"
+              value={deckToPost.name}
+              onChange={handleDeckToPostChange}
+              ref={deckNameRef}
+              autoComplete="off"
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="deck-created-by">Your name</label>
+            <input
+              type="text"
+              name="deck-name"
+              id="deck-created-by"
+              data-prop="createdBy"
+              value={deckToPost.createdBy}
+              onChange={handleDeckToPostChange}
+              ref={createdByRef}
+            />
+          </div>
           <button className="btn-primary" type="submit">Add deck</button>
         </form>
 

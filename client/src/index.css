@@ -35,21 +35,31 @@ main {
 }
 
 .btn-primary {
-  padding: 5px 20px;
+  padding: 8px 20px;
   font-size: 1rem;
   border-radius: 5px;
   border: none;
-}
-
-input#deck-name {
-  border: none;
-  border-radius: 5px;
-  width: 200px;
+  background-color: var(--white);
 }
 
 .add-deck-form {
   display: flex;
-  gap: 5px;
+  flex-direction: column;
+  gap: 15px;
+  width: 50%;
+}
+
+.add-deck-form input {
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 1rem;
+  width: 100%;
+  background-color: white;
+}
+
+.add-deck-form label {
+  margin-bottom: 5px;
 }
 
 .decks {
@@ -57,7 +67,7 @@ input#deck-name {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   overflow: hidden;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
 .deck {
