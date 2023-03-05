@@ -1,32 +1,37 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:4000"
+axios.defaults.baseURL = "http://localhost:4000";
 
-interface IDeck {
+interface IDeckBase {
   name: string,
   createdBy: string,
+}
+
+type IDeckToPost = IDeckBase
+
+interface IDeckToShowOnPage extends IDeckBase {
+  createdAt: string
+}
+
+interface IDeckInDB extends IDeckBase {
   createdAt: string,
-  updatedAt: string
+  updatedAt: string,
+  _id: string
 }
-
-// createdAt and updatedAt properties are set by DB
-interface IDeckToPost {
-  name: string,
-  createdBy: string
-}
-
 
 const App = () => {
   const [deckToPost, setDeckToPost] = useState<IDeckToPost>(
     { name: "", createdBy: "" }
   );
-  const [decks, setDecks] = useState<IDeck[]>([]);
+  const [decks, setDecks] = useState<IDeckToShowOnPage[]>([]);
   const deckNameRef = useRef<HTMLInputElement>(null);
   const createdByRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    (async () => setDecks(await fetchDecks()))();
+    (async () => {
+      setDecks(await fetchDecks() as IDeckToShowOnPage[]);
+    })();
   }, [])
 
   
@@ -91,7 +96,7 @@ const App = () => {
   
   async function fetchDecks() {
     try {
-      const { data } = await axios.get("/decks");
+      const { data } = await axios.get<IDeckInDB[]>("/decks");
       return data;
     } catch (err) {
       console.error(err);
@@ -100,18 +105,19 @@ const App = () => {
   
   async function postDeck(deck: IDeckToPost | undefined) {
     try {
-      const { data } = await axios.post("/decks", deck);
-      addDeckAfterSuccessfulPost(data._id);
+      const { data: deckFromDB } = await axios.post<IDeckInDB>("/decks", deck);
+      console.log(deckFromDB);
+      addDeckAfterSuccessfulPost(deckFromDB);
     } catch (err) {
       console.error(err);
     }
   }
 
-  function addDeckAfterSuccessfulPost(deckId: string) {
-    // TODO implement this
+  function addDeckAfterSuccessfulPost(deck: IDeckToShowOnPage) {
+    setDecks(prevState => [deck, ...prevState]);
   }
   
-  function decksNodesCb(deck: IDeck, i: number) {
+  function decksNodesCb(deck: IDeckToShowOnPage, i: number) {
     const createdAt = formatDateString(deck.createdAt);
     return (
       <div className="deck" key={i}>
