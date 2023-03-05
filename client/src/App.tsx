@@ -4,7 +4,9 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:4000"
 
 interface IDeck {
-  name: string
+  name: string,
+  createdBy: string,
+  createdAt: string
 }
 
 const App = () => {
@@ -15,12 +17,12 @@ const App = () => {
       setDecks(await fetchDecks());
     })();
   }, [])
-  console.log(decks);
 
+  const decksNodes = decks.map(decksNodesCb);
   return (
     <div className="app">
       <div className="decks">
-        { }
+        {decksNodes}
       </div>
     </div>
   )
@@ -33,6 +35,39 @@ async function fetchDecks() {
   } catch (err) {
     console.error(err);
   }
+}
+
+function decksNodesCb(deck: IDeck, i: number) {
+  const createdAt = formatDateString(deck.createdAt);
+  return <div className="deck" key={i}>
+    <div className="deck-name">{deck.name}</div>
+    <div className="deck-created-by">{deck.createdBy}</div>
+    <div className="deck-created-at">{createdAt}</div>
+  </div>
+}
+
+function formatDateString(dateStr: string) {
+  const date = new Date(dateStr);
+  const dayOfMonth = getDayOfMonth(date);
+  const monthNumber = getMonthNumber(date);
+  const year = getLastTwoDigitsOfYear(date);
+  return `${dayOfMonth}/${monthNumber}/${year}`;
+}
+
+function getDayOfMonth(date: Date) {
+  return date.getDate();
+}
+
+function getMonthNumber(date: Date) {
+  const monthOffset = 1;
+  return date.getMonth() + monthOffset;
+}
+
+function getLastTwoDigitsOfYear(date: Date) {
+  const fullYear = date.getFullYear();
+  const fullYearSplit = fullYear.toString().split("");
+  const lastTwoDigitsString = `${fullYearSplit[2]}${fullYearSplit[3]}`;
+  return Number(lastTwoDigitsString);
 }
 
 export default App;
