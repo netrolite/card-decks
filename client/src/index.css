@@ -1,3 +1,9 @@
+:root {
+  --black: rgb(40, 40, 40);
+  --white: rgb(220, 220, 220);
+  --gray: rgb(170, 170, 170);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -13,3 +19,52 @@ body {
 h1 {
   font-weight: 500;
 }
+
+main {
+  min-height: 100vh;
+  margin: 0 auto;
+  min-width: 0;
+  max-width: 700px;
+  width: 100%;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.decks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  overflow: hidden;
+}
+
+.deck {
+  padding: 10px;
+  border: 1px solid black;
+  background-color: var(--white);
+  color: var(--black);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.deck .name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+/* overflow: hidden; is required on parent element for text truncation to work */
+/* see .deck */
+.deck .name, .deck .created-by, .deck .created-at {
+  overflow: hidden;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+
+.deck .created-by, .deck .created-at {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+

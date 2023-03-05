@@ -9,6 +9,7 @@ interface IDeck {
   createdAt: string
 }
 
+
 const App = () => {
   const [decks, setDecks] = useState<IDeck[]>([])
 
@@ -20,13 +21,16 @@ const App = () => {
 
   const decksNodes = decks.map(decksNodesCb);
   return (
-    <div className="app">
-      <div className="decks">
-        {decksNodes}
-      </div>
+    <div id="app">
+      <main>
+        <div className="decks">
+          {decksNodes}
+        </div>
+      </main>
     </div>
   )
 }
+
 
 async function fetchDecks() {
   try {
@@ -39,11 +43,13 @@ async function fetchDecks() {
 
 function decksNodesCb(deck: IDeck, i: number) {
   const createdAt = formatDateString(deck.createdAt);
-  return <div className="deck" key={i}>
-    <div className="deck-name">{deck.name}</div>
-    <div className="deck-created-by">{deck.createdBy}</div>
-    <div className="deck-created-at">{createdAt}</div>
-  </div>
+  return (
+    <div className="deck" key={i}>
+      <div className="name">{deck.name}</div>
+      <div className="created-by">Created by {deck.createdBy}</div>
+      <div className="created-at">Created at {createdAt}</div>
+    </div>
+  )
 }
 
 function formatDateString(dateStr: string) {
