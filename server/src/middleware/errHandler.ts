@@ -74,7 +74,7 @@ export default class ErrHandler {
 
   private static handleInternalServerErr() {
     console.error(ErrHandler.err);
-    ErrHandler.errObject.message = "internal server error";
+    ErrHandler.errObject.message = ErrHandler.err.message;
   }
 
   private static sendErr(res: Response) {
