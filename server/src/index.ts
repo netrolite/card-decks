@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use("/decks", decksRoute);
 
-app.use(errHandler);
+app.use(errHandler.handle);
 
 const PORT = process.env.PORT ?? 4000;
 (async () => {

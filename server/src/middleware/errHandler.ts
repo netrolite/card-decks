@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { TApiErrors } from "../utils/errors";
-import ApiErr from "../utils/errors/ApiErr";
+import ApiErr, { Statuses } from "../utils/errors/ApiErr";
 import { MongoError } from "mongodb";
 
-interface IDuplicateErr {
+type TError = TApiErrors | Error | MongoError;
+type TMongoErrCode = number | string | undefined;
+
+interface IMongoDuplicateErr {
   driver: boolean,
   name: string,
   index: number,
@@ -19,31 +22,63 @@ interface IErrObject {
   duplicates?: string[]
 }
 
-// not a class because express 
-export default function errHandler(
-  err: TApiErrors | Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  let statusCode = 500;
-  const errObject: IErrObject = {
-    message: err.message || "internal server error"
+
+export default class ErrHandler {
+  private constructor() {};
+
+  private static errObject: IErrObject = { message: "" }
+  private static err: TApiErrors | Error | MongoError;
+  private static statusCode: Statuses = Statuses.InternalServer;
+  private static mongoErrCode: TMongoErrCode;
+
+  static handle(
+    err: TError,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    ErrHandler.setupStaticProperties(err);
+    ErrHandler.detectErrTypeAndHandle();
+    ErrHandler.sendErr(res);
   }
 
-  if (err instanceof ApiErr) {
-    statusCode = err.status;
-  } else if (err instanceof MongoError) {
-    if (err.code === 11000) handleDuplicateErr();
+  private static setupStaticProperties(err: TError) {
+    ErrHandler.err = err;
+    ErrHandler.errObject = { message: ErrHandler.err.message };
+    ErrHandler.statusCode = Statuses.InternalServer;
+    ErrHandler.mongoErrCode = undefined;
   }
 
-  console.error(err);
-  res.status(statusCode);
-  return res.send(errObject);
+  private static detectErrTypeAndHandle() {
+    const err = ErrHandler.err;
+    if (err instanceof ApiErr) ErrHandler.handleApiErr();
+    else if (err instanceof MongoError) ErrHandler.handleMongoErr();
+    else ErrHandler.handleInternalServerErr();
+  }
 
-  function handleDuplicateErr() {
-    const duplicateErr = err as IDuplicateErr;
-    errObject.message = "duplicate key error"
-    errObject.duplicates = Object.keys(duplicateErr.keyValue);
+  private static handleApiErr() {
+    ErrHandler.statusCode = ((ErrHandler.err as TApiErrors).status);
+  }
+
+  private static handleMongoErr() {
+    ErrHandler.statusCode = Statuses.BadRequest;
+    ErrHandler.mongoErrCode = (ErrHandler.err as MongoError).code;
+
+    const duplicateErrCode = 11000;
+    if (ErrHandler.mongoErrCode === duplicateErrCode) {
+      const duplicateErr = ErrHandler.err as IMongoDuplicateErr;
+      ErrHandler.errObject.message = "duplicate key error"
+      ErrHandler.errObject.duplicates = Object.keys(duplicateErr.keyValue);
+    }
+  }
+
+  private static handleInternalServerErr() {
+    console.error(ErrHandler.err);
+    ErrHandler.errObject.message = "internal server error";
+  }
+
+  private static sendErr(res: Response) {
+    res.status(ErrHandler.statusCode);
+    return res.send(ErrHandler.errObject);
   }
 }
