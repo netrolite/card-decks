@@ -34,6 +34,10 @@ main {
   padding: 30px;
 }
 
+button {
+  cursor: pointer;
+}
+
 .btn-primary {
   padding: 8px 20px;
   font-size: 1rem;
