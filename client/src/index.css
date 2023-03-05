@@ -8,6 +8,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  display: block;
+}
+
+style, script, title {
+  display: none;
 }
 
 body {
@@ -27,9 +32,24 @@ main {
   max-width: 800px;
   width: 100%;
   padding: 30px;
+}
+
+.btn-primary {
+  padding: 5px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+}
+
+input#deck-name {
+  border: none;
+  border-radius: 5px;
+  width: 200px;
+}
+
+.add-deck-form {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 5px;
 }
 
 .decks {
@@ -37,6 +57,7 @@ main {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   overflow: hidden;
+  margin-top: 30px;
 }
 
 .deck {

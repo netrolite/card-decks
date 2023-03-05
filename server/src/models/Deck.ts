@@ -9,12 +9,10 @@ const DeckSchema = new mongoose.Schema({
   },
   createdBy: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   }
 }, {
-  timestamps: true,
-  
+  timestamps: true
 })
 
 const Deck = mongoose.model("Deck", DeckSchema);
