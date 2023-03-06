@@ -3,6 +3,7 @@ import axios from "axios";
 import formatDateString from "../utils/formatDateString";
 import NewDeckForm from "../components/NewDeckForm";
 import Deck from "../components/Deck";
+import { useLoaderData } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
@@ -20,37 +21,30 @@ export interface IDeckInDB extends IDeckBase {
   _id: string
 }
 
-const App = () => {
-  const [decks, setDecks] = useState<IDeckToShowOnPage[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      setDecks(await fetchDecks() as IDeckToShowOnPage[]);
-    })();
-  }, [])
-
+const Decks = () => {
+  const decks = useLoaderData() as IDeckToShowOnPage[];
+  console.log("app render");
+  
   const decksNodes = decks.map(decksNodesCb);
   return (
     <>
-      <NewDeckForm setDecks={setDecks} />
+      <NewDeckForm />
       <div className="decks">
         {decksNodes}
       </div>
     </>
   )
-
-  async function fetchDecks() {
-    try {
-      const { data } = await axios.get<IDeckInDB[]>("/decks");
-      return data.reverse();
-    } catch (err) { console.error(err); }
-  }
   
   function decksNodesCb(deck: IDeckToShowOnPage, i: number) {
-    const createdAt = formatDateString(deck.createdAt);
-    deck.createdAt = createdAt;
+    deck.createdAt = formatDateString(deck.createdAt);
     return <Deck deck={deck} key={i} />
   }
 }
 
-export default App;
+export default Decks;
+
+export async function decksLoader() {
+  console.log("decks loader");
+  const response = await axios.get<IDeckInDB>("/decks");
+  return response.data;
+}
