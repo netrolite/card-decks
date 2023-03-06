@@ -41,7 +41,7 @@ const App = () => {
   async function fetchDecks() {
     try {
       const { data } = await axios.get<IDeckInDB[]>("/decks");
-      return data;
+      return data.reverse();
     } catch (err) {
       console.error(err);
     }
