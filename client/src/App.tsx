@@ -1,32 +1,26 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
+import formatDateString from "./utils/formatDateString";
+import NewDeckForm from "./components/NewDeckForm";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
-interface IDeckBase {
+export interface IDeckBase {
   name: string,
   createdBy: string,
 }
-
-type IDeckToPost = IDeckBase
-
-interface IDeckToShowOnPage extends IDeckBase {
+export type IDeckToPost = IDeckBase
+export interface IDeckToShowOnPage extends IDeckBase {
   createdAt: string
 }
-
-interface IDeckInDB extends IDeckBase {
+export interface IDeckInDB extends IDeckBase {
   createdAt: string,
   updatedAt: string,
   _id: string
 }
 
 const App = () => {
-  const [deckToPost, setDeckToPost] = useState<IDeckToPost>(
-    { name: "", createdBy: "" }
-  );
   const [decks, setDecks] = useState<IDeckToShowOnPage[]>([]);
-  const deckNameRef = useRef<HTMLInputElement>(null);
-  const createdByRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -34,44 +28,11 @@ const App = () => {
     })();
   }, [])
 
-  
-  console.log(deckToPost);
   const decksNodes = decks.map(decksNodesCb);
   return (
     <div id="app">
       <main>
-        <form
-          className="add-deck-form"
-          onSubmit={handleFormSubmit}
-        >
-          <div className="input-group">
-            <label htmlFor="deck-name">Deck name</label>
-            <input
-              type="text"
-              name="deck-name"
-              id="deck-name"
-              data-prop="name"
-              value={deckToPost.name}
-              onChange={handleDeckToPostChange}
-              ref={deckNameRef}
-              autoComplete="off"
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="deck-created-by">Your name</label>
-            <input
-              type="text"
-              name="deck-name"
-              id="deck-created-by"
-              data-prop="createdBy"
-              value={deckToPost.createdBy}
-              onChange={handleDeckToPostChange}
-              ref={createdByRef}
-            />
-          </div>
-          <button className="btn-primary" type="submit">Add deck</button>
-        </form>
-
+        <NewDeckForm setDecks={setDecks} />
         <div className="decks">
           {decksNodes}
         </div>
@@ -79,25 +40,6 @@ const App = () => {
     </div>
   )
 
-  function handleDeckToPostChange(e: any) {
-    const changedProp = e.target.dataset.prop;
-    const value = e.target.value;
-    setDeckToPost(prevState => (
-      { ...prevState, [changedProp]: value }
-    ))
-  }
-
-  function handleFormSubmit(e: FormEvent) {
-    e.preventDefault();
-    postDeck(deckToPost);
-    clearForm();
-  }
-
-  function clearForm() {
-    (deckNameRef.current as HTMLInputElement).value = "";
-    (createdByRef.current as HTMLInputElement).value = "";
-  }
-  
   async function fetchDecks() {
     try {
       const { data } = await axios.get<IDeckInDB[]>("/decks");
@@ -105,20 +47,6 @@ const App = () => {
     } catch (err) {
       console.error(err);
     }
-  }
-  
-  async function postDeck(deck: IDeckToPost | undefined) {
-    try {
-      const { data: deckFromDB } = await axios.post<IDeckInDB>("/decks", deck);
-      console.log(deckFromDB);
-      addDeckAfterSuccessfulPost(deckFromDB);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  function addDeckAfterSuccessfulPost(deck: IDeckToShowOnPage) {
-    setDecks(prevState => [deck, ...prevState]);
   }
   
   function decksNodesCb(deck: IDeckToShowOnPage, i: number) {
@@ -131,39 +59,6 @@ const App = () => {
       </div>
     )
   }
-  
-  function formatDateString(dateStr: string) {
-    const date = new Date(dateStr);
-    const dayOfMonth = getDayOfMonth(date);
-    const monthNumber = getMonthNumber(date);
-    const year = getLastTwoDigitsOfYear(date);
-    const time = getTime(date);
-    return `${dayOfMonth}/${monthNumber}/${year} at ${time}`;
-  }
-  
-  function getDayOfMonth(date: Date) {
-    return date.getDate();
-  }
-  
-  function getMonthNumber(date: Date) {
-    const monthOffset = 1;
-    return date.getMonth() + monthOffset;
-  }
-  
-  function getLastTwoDigitsOfYear(date: Date) {
-    const fullYear = date.getFullYear();
-    const fullYearSplit = fullYear.toString().split("");
-    const lastTwoDigitsString = `${fullYearSplit[2]}${fullYearSplit[3]}`;
-    return Number(lastTwoDigitsString);
-  }
-
-  function getTime(date: Date) {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return `${hours}:${minutes}`;
-  }
 }
-
-
 
 export default App;
