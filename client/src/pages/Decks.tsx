@@ -3,7 +3,7 @@ import axios from "axios";
 import formatDateString from "../utils/formatDateString";
 import NewDeckForm from "../components/NewDeckForm";
 import Deck from "../components/Deck";
-import { useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
@@ -23,7 +23,6 @@ export interface IDeckInDB extends IDeckBase {
 
 const Decks = () => {
   const decks = useLoaderData() as IDeckToShowOnPage[];
-  console.log("app render");
   
   const decksNodes = decks.map(decksNodesCb);
   return (
@@ -43,8 +42,17 @@ const Decks = () => {
 
 export default Decks;
 
-export async function decksLoader() {
-  console.log("decks loader");
-  const response = await axios.get<IDeckInDB>("/decks");
-  return response.data;
+export async function decksLoader({ request, params }: LoaderFunctionArgs) {
+  const { data: decks } = await axios.get<IDeckInDB[]>("/decks");
+  return decks.reverse(); // show last added first
+}
+
+export async function decksAction({ request, params }: LoaderFunctionArgs) {
+  const dataGetter = await request.formData();
+  await axios.post("/decks", {
+    name: dataGetter.get("name"),
+    createdBy: dataGetter.get("createdBy")
+  });
+
+  return null; // must return data or null from action function
 }
