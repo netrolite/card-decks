@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import formatDateString from "./utils/formatDateString";
-import NewDeckForm from "./components/NewDeckForm";
+import formatDateString from "../utils/formatDateString";
+import NewDeckForm from "../components/NewDeckForm";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
@@ -30,14 +30,12 @@ const App = () => {
 
   const decksNodes = decks.map(decksNodesCb);
   return (
-    <div id="app">
-      <main>
-        <NewDeckForm setDecks={setDecks} />
-        <div className="decks">
-          {decksNodes}
-        </div>
-      </main>
-    </div>
+    <>
+      <NewDeckForm setDecks={setDecks} />
+      <div className="decks">
+        {decksNodes}
+      </div>
+    </>
   )
 
   async function fetchDecks() {

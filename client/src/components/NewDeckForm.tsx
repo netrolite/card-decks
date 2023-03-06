@@ -1,5 +1,5 @@
 import { useState, useRef, FormEvent, FC } from "react";
-import type { IDeckToPost, IDeckInDB, IDeckToShowOnPage } from "../App";
+import type { IDeckToPost, IDeckInDB, IDeckToShowOnPage } from "../Router";
 import axios from "axios";
 
 interface Props {
