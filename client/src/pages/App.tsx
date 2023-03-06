@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import formatDateString from "../utils/formatDateString";
 import NewDeckForm from "../components/NewDeckForm";
+import Deck from "../components/Deck";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
@@ -42,20 +43,13 @@ const App = () => {
     try {
       const { data } = await axios.get<IDeckInDB[]>("/decks");
       return data.reverse();
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
   }
   
   function decksNodesCb(deck: IDeckToShowOnPage, i: number) {
     const createdAt = formatDateString(deck.createdAt);
-    return (
-      <div className="deck" key={i}>
-        <div className="name">{deck.name}</div>
-        <div className="created-by">Created by {deck.createdBy}</div>
-        <div className="created-at">Created at {createdAt}</div>
-      </div>
-    )
+    deck.createdAt = createdAt;
+    return <Deck deck={deck} key={i} />
   }
 }
 
