@@ -10,7 +10,7 @@ interface Props {
 
 }
 
-const Error: FC<Props> = () => {
+const ErrorPage: FC<Props> = () => {
   const error = useRouteError() as Error;
   const message = error.message || "Something went wrong...";
   const isAtRootUrl = location.pathname === "/";
@@ -27,9 +27,9 @@ const Error: FC<Props> = () => {
 export const BackToHomeBtn = () => {
   return (
     <Link to="/">
-      <button className="btn-primary err-page-btn">Back to homepage</button>
+      <button className="btn-primary mt-3">Back to homepage</button>
     </Link>
   )
 }
 
-export default Error;
+export default ErrorPage;

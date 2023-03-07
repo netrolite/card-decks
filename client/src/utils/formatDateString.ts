@@ -1,14 +1,10 @@
 export default function formatDateString(dateString: string) {
   const date = new Date(dateString);
-  const dayOfMonth = getDayOfMonth(date);
+  const dayOfMonth = date.getDate();
   const monthNumber = getMonthNumber(date);
   const year = getLastTwoDigitsOfYear(date);
   const time = getTime(date);
   return `${dayOfMonth}/${monthNumber}/${year} at ${time}`;
-}
-
-function getDayOfMonth(date: Date) {
-  return date.getDate();
 }
 
 function getMonthNumber(date: Date) {
@@ -17,13 +13,13 @@ function getMonthNumber(date: Date) {
 }
 
 function getLastTwoDigitsOfYear(date: Date) {
-  const fullYear = date.getFullYear();
-  const fullYearSplit = fullYear.toString().split("");
+  const fullYearStr = date.getFullYear().toString();
+  const fullYearSplit = fullYearStr.split("");
   const lastTwoDigitsString = `${fullYearSplit[2]}${fullYearSplit[3]}`;
   return lastTwoDigitsString;
 }
 
-function getTime(date: Date) {
+export function getTime(date: Date) {
   let hours = date.getHours().toString();
   let minutes = date.getMinutes().toString();
   if (Number(hours) < 10) hours = `0${hours}`;

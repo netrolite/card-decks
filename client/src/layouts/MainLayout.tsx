@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { IErrState } from "../pages/ErrorPage";
 
 const MainLayout = () => {
   return (

@@ -5,15 +5,15 @@ interface Props {
 
 }
 
-const NotFound: FC<Props> = () => {
+const NotFoundPage: FC<Props> = () => {
   return (
     <>
       <h1>Page not found</h1>
       <Link to="/">
-        <button className="btn-primary">Back to homepage</button>
+        <button className="btn-primary mt-3">Back to homepage</button>
       </Link>     
     </>
   )
 }
 
-export default NotFound;
+export default NotFoundPage;

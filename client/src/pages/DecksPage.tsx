@@ -4,32 +4,25 @@ import formatDateString from "../utils/formatDateString";
 import NewDeckForm from "../components/NewDeckForm";
 import Deck from "../components/Deck";
 import copyObj from "../utils/copyObj";
-import { IErrState } from "./Error";
+import { IErrState } from "./ErrorPage";
+import { Outlet } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
-export interface IDeckBase {
+export interface IDeck {
   name: string,
   createdBy: string,
-}
-export type IDeckToPost = IDeckBase
-export interface IDeckToShowOnPage extends IDeckBase {
-  createdAt: string
-}
-export interface IDeckInDB extends IDeckBase {
   createdAt: string,
   updatedAt: string,
   _id: string
 }
 
-const Decks = () => {
-  const [decks, setDecks] = useState<IDeckToShowOnPage[]>([]);
+const DecksPage = () => {
+  const [decks, setDecks] = useState<IDeck[]>([]);
   const [error, setError] = useState<IErrState>({ occurred: false });
   if (error.occurred) throw new Error(error.message);
 
-  useEffect(() => {
-    (async () => { await loadDecks() })();
-  }, [])
+  useEffect(() => { loadDecks() }, [])
   
   const decksNodes = decks.map(decksNodesCb);
   return (
@@ -41,7 +34,7 @@ const Decks = () => {
     </>
   )
   
-  function decksNodesCb(deck: IDeckToShowOnPage, i: number) {
+  function decksNodesCb(deck: IDeck, i: number) {
     // modifying a property directly on the deck object causes that property to be different in the subsequent test renders performed by react in strict mode
     const deckData = copyObj(deck);
     deckData.createdAt = formatDateString(deckData.createdAt);
@@ -50,7 +43,7 @@ const Decks = () => {
 
   async function loadDecks() {
     try {
-      const { data: decks } = await axios.get<IDeckInDB[]>("/decks");
+      const { data: decks } = await axios.get<IDeck[]>("/decks");
       setDecks(decks.reverse());
     } catch (err) {
       setError({ occurred: true, message: "Could not load decks" });
@@ -58,4 +51,4 @@ const Decks = () => {
   }
 }
 
-export default Decks;
+export default DecksPage;

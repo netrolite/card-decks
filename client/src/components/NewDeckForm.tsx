@@ -1,10 +1,10 @@
 import { useState, FormEvent, FC } from "react";
-import type { IDeckInDB, IDeckToShowOnPage } from "../pages/Decks";
+import type { IDeck } from "../pages/DecksPage";
 import axios from "axios";
-import { IErrState } from "../pages/Error";
+import { IErrState } from "../pages/ErrorPage";
 
 interface Props {
-  setDecks: React.Dispatch<React.SetStateAction<IDeckToShowOnPage[]>>
+  setDecks: React.Dispatch<React.SetStateAction<IDeck[]>>
 }
 
 interface IFormData {
@@ -62,14 +62,14 @@ const NewDeckForm: FC<Props> = ({ setDecks }) => {
 
   async function postDeck() {
     try {
-      const { data: deck } = await axios.post<IDeckInDB>("/decks", formData);
+      const { data: deck } = await axios.post<IDeck>("/decks", formData);
       return deck;
     } catch (err) {
       setError({ occurred: true, message: "Could not send data to the server" })
     }
   }
 
-  function addPostedDeckToDecksState(deck: IDeckInDB) {
+  function addPostedDeckToDecksState(deck: IDeck) {
     setDecks(prev => [deck, ...prev]);
   }
 
