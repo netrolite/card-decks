@@ -38,12 +38,20 @@ button {
   cursor: pointer;
 }
 
+a:has(button) {
+  text-decoration: none;
+}
+
 .btn-primary {
   padding: 8px 20px;
   font-size: 1rem;
   border-radius: 5px;
   border: none;
   background-color: var(--white);
+}
+
+.err-page-btn {
+  margin-top: 15px;
 }
 
 .add-deck-form {
