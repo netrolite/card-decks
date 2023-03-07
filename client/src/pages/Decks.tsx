@@ -4,6 +4,7 @@ import formatDateString from "../utils/formatDateString";
 import NewDeckForm from "../components/NewDeckForm";
 import Deck from "../components/Deck";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import copyObj from "../utils/copyObj";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
@@ -35,8 +36,10 @@ const Decks = () => {
   )
   
   function decksNodesCb(deck: IDeckToShowOnPage, i: number) {
-    deck.createdAt = formatDateString(deck.createdAt);
-    return <Deck deck={deck} key={i} />
+    // modifying a property directly on the deck object causes that property to be different in the subsequent test render performed by react in strict mode
+    const deckData = copyObj(deck);
+    deckData.createdAt = formatDateString(deckData.createdAt);
+    return <Deck {...deckData} key={i} />;
   }
 }
 
@@ -44,7 +47,7 @@ export default Decks;
 
 export async function decksLoader({ request, params }: LoaderFunctionArgs) {
   const { data: decks } = await axios.get<IDeckInDB[]>("/decks");
-  return decks.reverse(); // show last added first
+  return decks.reverse();
 }
 
 export async function decksAction({ request, params }: LoaderFunctionArgs) {
@@ -54,5 +57,5 @@ export async function decksAction({ request, params }: LoaderFunctionArgs) {
     createdBy: dataGetter.get("createdBy")
   });
 
-  return null; // must return data or null from action function
+  return null; // must return some data or null from action function
 }

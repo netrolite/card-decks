@@ -20,11 +20,14 @@ function getLastTwoDigitsOfYear(date: Date) {
   const fullYear = date.getFullYear();
   const fullYearSplit = fullYear.toString().split("");
   const lastTwoDigitsString = `${fullYearSplit[2]}${fullYearSplit[3]}`;
-  return Number(lastTwoDigitsString);
+  return lastTwoDigitsString;
 }
 
 function getTime(date: Date) {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  let hours = date.getHours().toString();
+  let minutes = date.getMinutes().toString();
+  if (Number(hours) < 10) hours = `0${hours}`;
+  if (Number(minutes) < 10) minutes = `0${minutes}`;
+
   return `${hours}:${minutes}`;
 }

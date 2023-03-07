@@ -1,19 +1,17 @@
 import { FC } from "react"
 
 interface Props {
-  deck: {
-    name: string,
-    createdBy: string,
-    createdAt: string,
-  },
+  name: string,
+  createdBy: string,
+  createdAt: string,
 }
 
-const Deck: FC<Props> = ({ deck }) => {
+const Deck: FC<Props> = ({ name, createdBy, createdAt }) => {
   return (
     <div className="deck">
-      <div className="name">{deck.name}</div>
-      <div className="created-by">Created by {deck.createdBy}</div>
-      <div className="created-at">Created at {deck.createdAt}</div>
+      <div className="name">{name}</div>
+      <div className="created-by">Created by {createdBy}</div>
+      <div className="created-at">Created on {createdAt}</div>
     </div>
   )
 }
