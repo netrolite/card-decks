@@ -3,8 +3,7 @@ export default function formatDateString(dateString: string) {
   const dayOfMonth = date.getDate();
   const monthNumber = getMonthNumber(date);
   const year = getLastTwoDigitsOfYear(date);
-  const time = getTime(date);
-  return `${dayOfMonth}/${monthNumber}/${year} at ${time}`;
+  return `${dayOfMonth}/${monthNumber}/${year}`;
 }
 
 function getMonthNumber(date: Date) {
@@ -17,13 +16,4 @@ function getLastTwoDigitsOfYear(date: Date) {
   const fullYearSplit = fullYearStr.split("");
   const lastTwoDigitsString = `${fullYearSplit[2]}${fullYearSplit[3]}`;
   return lastTwoDigitsString;
-}
-
-export function getTime(date: Date) {
-  let hours = date.getHours().toString();
-  let minutes = date.getMinutes().toString();
-  if (Number(hours) < 10) hours = `0${hours}`;
-  if (Number(minutes) < 10) minutes = `0${minutes}`;
-
-  return `${hours}:${minutes}`;
 }

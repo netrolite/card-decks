@@ -22,7 +22,7 @@ const DecksPage = () => {
   const [error, setError] = useState<IErrState>({ occurred: false });
   if (error.occurred) throw new Error(error.message);
 
-  useEffect(() => { loadDecks() }, [])
+  useEffect(() => { loadDecks() }, []);
   
   const decksNodes = decks.map(decksNodesCb);
   return (

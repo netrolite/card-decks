@@ -1,8 +1,8 @@
+import "../styles/DeckPage.css";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
-import formatDateString from "../utils/formatDateString";
 import { IDeck } from "./DecksPage";
 import { IErrState } from "./ErrorPage";
 import formatDateStringVerbose from "../utils/formatDateStringVerbose";
@@ -25,8 +25,9 @@ const DeckPage: FC<Props> = () => {
         deck ? (
           <>
             <h1>{deck.name}</h1>
-            <div>
-              Created by {deck.createdBy} on {formatDateStringVerbose(deck.createdAt)}
+            <div className="deck-meta">
+              <div>Created by {deck.createdBy} on {formatDateStringVerbose(deck.createdAt)}</div>
+              
             </div>
           </>
         ) : <LoadingSpinner />
