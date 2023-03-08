@@ -3,3 +3,7 @@
   font-size: 0.9rem;
   color: gray;
 }
+
+.content.loading {
+  height: 500px;
+}

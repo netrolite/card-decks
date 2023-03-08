@@ -14,6 +14,7 @@ interface Props {
 
 const DeckPage: FC<Props> = () => {
   const [deck, setDeck] = useState<IDeck>();
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [error, setError] = useState<IErrState>({ occurred: false });
   if (error.occurred) throw new Error(error.message);
   const {deckId} = useParams();
@@ -21,7 +22,7 @@ const DeckPage: FC<Props> = () => {
   useEffect(() => { loadDeck() }, []);
   
   return (
-    <>
+    <div className={`content${hasLoaded ? "" : " loading"}`}>
       {
         deck ? (
           <>
@@ -33,13 +34,14 @@ const DeckPage: FC<Props> = () => {
           </>
         ) : <LoadingSpinner />
       }
-    </>
+    </div>
   )
 
   async function loadDeck() {
     try {
       const { data: deck } = await axios.get<IDeck>(`/decks/${deckId}`);
       setDeck(deck);
+      setHasLoaded(true);
     } catch (err) {
       setError({ occurred: true, message: "Could not load deck" });
     }

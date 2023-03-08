@@ -26,6 +26,11 @@
   margin-top: 50px;
 }
 
+.decks.loading {
+  display: block;
+  height: 300px;
+}
+
 .deck {
   padding: 10px;
   border: 1px solid black;

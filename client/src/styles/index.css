@@ -2,6 +2,7 @@
   --black: rgb(40, 40, 40);
   --white: rgb(220, 220, 220);
   --gray: rgb(170, 170, 170);
+  --red: rgb(209, 70, 70);
 }
 
 * {
@@ -60,4 +61,8 @@ a {
   border-radius: 5px;
   border: none;
   background-color: var(--white);
+}
+
+.loading {
+  position: relative;
 }

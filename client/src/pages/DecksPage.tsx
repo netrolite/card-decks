@@ -6,7 +6,7 @@ import NewDeckForm from "../components/NewDeckForm";
 import Deck from "../components/Deck";
 import copyObj from "../utils/copyObj";
 import { IErrState } from "./ErrorPage";
-import { Outlet } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 axios.defaults.baseURL = "http://localhost:4000";
 
@@ -21,6 +21,7 @@ export interface IDeck {
 const DecksPage = () => {
   const [decks, setDecks] = useState<IDeck[]>([]);
   const [error, setError] = useState<IErrState>({ occurred: false });
+  const [hasLoaded, setHasLoaded] = useState(false);
   if (error.occurred) throw new Error(error.message);
 
   useEffect(() => { loadDecks() }, []);
@@ -29,8 +30,8 @@ const DecksPage = () => {
   return (
     <>
       <NewDeckForm setDecks={setDecks} />
-      <div className="decks">
-        {decksNodes}
+      <div className={`decks${hasLoaded ? "" : " loading"}`}>
+        {hasLoaded ? decksNodes : <LoadingSpinner />}
       </div>
     </>
   )
@@ -46,6 +47,7 @@ const DecksPage = () => {
     try {
       const { data: decks } = await axios.get<IDeck[]>("/decks");
       setDecks(decks.reverse());
+      setHasLoaded(true);
     } catch (err) {
       setError({ occurred: true, message: "Could not load decks" });
     }
