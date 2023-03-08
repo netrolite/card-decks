@@ -5,8 +5,7 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { IDeck } from "./DecksPage";
 import { IErrState } from "./ErrorPage";
-import UpdatedAt from "../components/UpdatedAt";
-import CreatedByUserAt from "../components/CreatedByUserAt";
+import DeckData from "../components/DeckData";
 
 interface Props {
 
@@ -23,17 +22,7 @@ const DeckPage: FC<Props> = () => {
   
   return (
     <div className={`content${hasLoaded ? "" : " loading"}`}>
-      {
-        deck ? (
-          <>
-            <h1>{deck.name}</h1>
-            <div className="deck-meta">
-              <CreatedByUserAt createdBy={deck.createdBy} createdAt={deck.createdAt} />      
-              <UpdatedAt createdAt={deck.createdAt} updatedAt={deck.updatedAt} />
-            </div>
-          </>
-        ) : <LoadingSpinner />
-      }
+      {deck ? <DeckData deck={deck} /> : <LoadingSpinner />}
     </div>
   )
 
