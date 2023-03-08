@@ -10,10 +10,7 @@ export async function getDecks(req: Request, res: Response) {
 export async function getDeckById(req: Request, res: Response) {
   const { deckId } = req.params;
   const result = await Deck.findById(deckId);
-  setTimeout(() => {
-    
-    res.status(200).json(result);
-  }, 10000)
+  res.status(200).json(result);
 }
 
 export async function postDeck(req: Request, res: Response) {
