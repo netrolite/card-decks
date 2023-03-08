@@ -6,6 +6,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { IDeck } from "./DecksPage";
 import { IErrState } from "./ErrorPage";
 import formatDateStringVerbose from "../utils/formatDateStringVerbose";
+import UpdatedAt from "../components/UpdatedAt";
 
 interface Props {
 
@@ -27,7 +28,7 @@ const DeckPage: FC<Props> = () => {
             <h1>{deck.name}</h1>
             <div className="deck-meta">
               <div>Created by {deck.createdBy} on {formatDateStringVerbose(deck.createdAt)}</div>
-              
+              <UpdatedAt createdAt={deck.createdAt} updatedAt={deck.updatedAt} />
             </div>
           </>
         ) : <LoadingSpinner />
