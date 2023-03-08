@@ -13,13 +13,13 @@ interface Props {
 const ErrorPage: FC<Props> = () => {
   const error = useRouteError() as Error;
   const message = error.message || "Something went wrong...";
-  const isAtRootUrl = location.pathname === "/";
+  const isAtDecksPath = location.pathname === "/decks";
 
   return (
     <>
       <h1>Error</h1>
       <div className="err-message">{message}</div>
-      { !isAtRootUrl && <BackToHomeBtn /> }
+      { !isAtDecksPath && <BackToHomeBtn /> }
     </>
   )
 }

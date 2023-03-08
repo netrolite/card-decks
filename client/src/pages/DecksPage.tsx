@@ -28,12 +28,12 @@ const DecksPage = () => {
   
   const decksNodes = decks.map(decksNodesCb);
   return (
-    <>
+    <div className="decks-page">
       <NewDeckForm setDecks={setDecks} />
       <div className={`decks${hasLoaded ? "" : " loading"}`}>
         {hasLoaded ? decksNodes : <LoadingSpinner />}
       </div>
-    </>
+    </div>
   )
   
   function decksNodesCb(deck: IDeck, i: number) {

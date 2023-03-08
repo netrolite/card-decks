@@ -23,3 +23,11 @@
   background-color: var(--red);
   color: white;
 }
+
+.deck-page .deck-actions {
+  padding-left: 10px;
+}
+
+.deck-page .deck-name {
+  word-break: break-all;
+}

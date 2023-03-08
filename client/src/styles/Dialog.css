@@ -1,0 +1,61 @@
+.dialog {
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transition: 0.2s;
+  transform: translate(-50%, -70%);
+  pointer-events: none;
+  opacity: 0;
+  background-color: var(--light);
+  padding: 20px;
+  border-radius: 5px;
+  color: black;
+  z-index: 1;
+}
+
+.dialog.active {
+  pointer-events: all;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.dialog .dialog-title {
+  margin-bottom: 20px;
+}
+
+.dialog-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.dialog-buttons button {
+  border: 2px solid var(--dark);
+}
+
+.dialog-buttons .dangerous {
+  background-color: var(--red);
+  color: var(--light);
+}
+
+.dialog-overlay {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  transition: 0.2s;
+  opacity: 0;
+  z-index: 0;
+}
+
+.dialog-overlay.active {
+  pointer-events: all;
+  opacity: 1;
+}
