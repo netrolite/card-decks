@@ -34,8 +34,8 @@
 .deck {
   padding: 10px;
   border: 1px solid black;
-  background-color: var(--white);
-  color: var(--black);
+  background-color: var(--light);
+  color: var(--dark);
   border-radius: 5px;
   overflow: hidden;
 }
@@ -60,21 +60,17 @@
 }
 
 @media all and (max-width: 750px) {
-  main {
-    padding: 20px;
-  }
-  
   .decks {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media all and (max-width: 550px) {
-  main {
-    padding: 10px;
-  }
-
   .decks {
     grid-template-columns: repeat(1, 1fr);
+  }
+
+  .add-deck-form {
+    width: 100%;
   }
 }

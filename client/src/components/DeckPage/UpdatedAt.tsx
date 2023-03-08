@@ -1,5 +1,5 @@
 import { FC } from "react";
-import timeElapsedSinceDate from "../utils/timeElapsedSinceDate";
+import timeElapsedSinceDate from "../../utils/timeElapsedSinceDate";
 
 interface Props {
   createdAt: string,

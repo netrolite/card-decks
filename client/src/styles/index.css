@@ -1,8 +1,9 @@
 :root {
-  --black: rgb(40, 40, 40);
-  --white: rgb(220, 220, 220);
+  --dark: rgb(40, 40, 40);
+  --light: rgb(220, 220, 220);
   --gray: rgb(170, 170, 170);
   --red: rgb(209, 70, 70);
+  --bg: rgb(40, 40, 40);
 }
 
 * {
@@ -18,7 +19,7 @@ style, script, title {
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: rgb(40, 40, 40);
+  background-color: var(--bg);
   color: white;
 }
 
@@ -44,7 +45,7 @@ h1 {
   min-width: 0;
   max-width: 800px;
   width: 100%;
-  padding: 30px;
+  padding: 50px 30px;
 }
 
 button {
@@ -55,14 +56,60 @@ a {
   text-decoration: none;
 }
 
-.btn-primary {
+.btn {
   padding: 8px 20px;
   font-size: 1rem;
   border-radius: 5px;
   border: none;
-  background-color: var(--white);
+}
+
+.btn.primary { background-color: var(--light); }
+.btn.danger {
+  background-color: var(--red);
+  color: var(--light);
+}
+.btn.gray { background-color: var(--gray); }
+
+.btn-icon {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  color: black;
+}
+
+.btn-tooltip {
+  position: relative;
+}
+
+.btn-tooltip::after {
+  content: attr(data-tooltip-text);
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.2s;
+  position: absolute;
+  top: -90%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 5px;
+  background-color: var(--light);
+  font-size: 0.9rem;
+  border-radius: 5px;
+}
+
+.btn-tooltip:hover::after {
+  pointer-events: all;
+  opacity: 1;
 }
 
 .loading {
   position: relative;
+}
+
+@media all and (max-width: 750px) {
+  #main-container { padding: 50px 20px; }
+}
+
+@media all and (max-width: 550px) {
+  #main-container { padding: 50px 15px; }
 }

@@ -7,3 +7,19 @@
 .content.loading {
   height: 400px;
 }
+
+.deck-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.deck-header .btn.danger {
+  background-color: var(--light);
+  color: var(--dark);
+  transition: 0.1s;
+}
+
+.deck-header .btn.danger:hover {
+  background-color: var(--red);
+  color: white;
+}

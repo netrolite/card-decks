@@ -5,7 +5,8 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { IDeck } from "./DecksPage";
 import { IErrState } from "./ErrorPage";
-import DeckData from "../components/DeckData";
+import DeckHeader from "../components/DeckPage/DeckHeader";
+import DeckMeta from "../components/DeckPage/DeckMeta";
 
 interface Props {
 
@@ -21,8 +22,19 @@ const DeckPage: FC<Props> = () => {
   useEffect(() => { loadDeck() }, []);
   
   return (
-    <div className={`content${hasLoaded ? "" : " loading"}`}>
-      {deck ? <DeckData deck={deck} /> : <LoadingSpinner />}
+    <div className={`deck-page${hasLoaded ? "" : " loading"}`}>
+      {
+        deck ? (
+          <>
+            <DeckHeader name={deck.name} />
+            <DeckMeta
+              createdAt={deck.createdAt}
+              createdBy={deck.createdBy}
+              updatedAt={deck.updatedAt}
+            />
+          </>
+        ) : <LoadingSpinner />
+      }
     </div>
   )
 

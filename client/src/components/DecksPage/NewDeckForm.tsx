@@ -1,7 +1,7 @@
 import { useState, FormEvent, FC } from "react";
-import type { IDeck } from "../pages/DecksPage";
+import type { IDeck } from "../../pages/DecksPage";
 import axios from "axios";
-import { IErrState } from "../pages/ErrorPage";
+import { IErrState } from "../../pages/ErrorPage";
 
 interface Props {
   setDecks: React.Dispatch<React.SetStateAction<IDeck[]>>
@@ -43,7 +43,7 @@ const NewDeckForm: FC<Props> = ({ setDecks }) => {
           onChange={handleChange}
         />
       </div>
-      <button className="btn-primary" type="submit">Add deck</button>
+      <button className="btn primary" type="submit">Add deck</button>
     </form>
   )
 

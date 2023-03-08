@@ -27,7 +27,7 @@ const ErrorPage: FC<Props> = () => {
 export const BackToHomeBtn = () => {
   return (
     <Link to="/">
-      <button className="btn-primary mt-3">Back to homepage</button>
+      <button className="btn primary mt-3">Back to homepage</button>
     </Link>
   )
 }

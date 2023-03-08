@@ -1,5 +1,5 @@
 import { FC } from "react";
-import formatDateStringVerbose from "../utils/formatDateStringVerbose";
+import formatDateStringVerbose from "../../utils/formatDateStringVerbose";
 
 interface Props {
   createdBy: string,
