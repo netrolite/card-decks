@@ -28,11 +28,22 @@ const DecksPage = () => {
   
   const decksNodes = decks.map(decksNodesCb);
   return (
+    
     <div className="decks-page">
-      <NewDeckForm setDecks={setDecks} />
-      <div className={`decks${hasLoaded ? "" : " loading"}`}>
-        {hasLoaded ? decksNodes : <LoadingSpinner />}
-      </div>
+      {
+        hasLoaded ? (
+          <>
+            <NewDeckForm setDecks={setDecks} />
+            <div className={`decks${decksNodes.length ? "" : " no-decks"}`}>
+              {
+                decksNodes.length
+                ? decksNodes
+                : "You have not created any decks yet"
+              }
+            </div>
+          </>
+        ) : <LoadingSpinner />
+      }
     </div>
   )
   

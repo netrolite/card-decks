@@ -26,11 +26,6 @@
   margin-top: 50px;
 }
 
-.decks.loading {
-  display: block;
-  height: 300px;
-}
-
 .deck {
   padding: 10px;
   border: 1px solid black;
@@ -57,6 +52,12 @@
 .deck .created-by, .deck .created-at {
   color: var(--gray);
   font-size: 0.9rem;
+}
+
+.no-decks {
+  display: block;
+  color: var(--gray);
+  font-style: italic;
 }
 
 @media all and (max-width: 750px) {

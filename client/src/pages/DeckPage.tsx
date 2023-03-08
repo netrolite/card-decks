@@ -22,7 +22,7 @@ const DeckPage: FC<Props> = () => {
   useEffect(() => { loadDeck() }, []);
   
   return (
-    <div className={`deck-page${hasLoaded ? "" : " loading"}`}>
+    <div className={`deck-page`}>
       {
         deck ? (
           <>

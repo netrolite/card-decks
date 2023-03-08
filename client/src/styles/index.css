@@ -107,6 +107,11 @@ a {
   position: relative;
 }
 
+.btn-icon-and-text {
+  display: flex;
+  gap: 5px;
+}
+
 @media all and (max-width: 750px) {
   #main-container { padding: 50px 20px; }
 }
