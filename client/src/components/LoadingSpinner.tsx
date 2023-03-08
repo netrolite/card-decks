@@ -5,7 +5,7 @@ interface Props {
 
 }
 
-// this component must be put inside an element with a fixed height
+// testing revealed that this component should be put inside an element with an absolute height property like px
 // e.g that element may change its height property using a class like "loading"
 // the class can be applied when hasLoaded state is set to false
 const LoadingSpinner: FC<Props> = () => {
