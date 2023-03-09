@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 
-interface Props {
+interface INoteFoundPageProps {
 
 }
 
-const NotFoundPage: FC<Props> = () => {
+const NotFoundPage: FC<INoteFoundPageProps> = () => {
   return (
     <>
       <h1>Page not found</h1>

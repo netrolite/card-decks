@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link, useNavigate, useRouteError } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 import { AiOutlineArrowLeft as BackArrow } from "react-icons/ai";
 
 export interface IErrState {
@@ -7,11 +7,11 @@ export interface IErrState {
   message?: string
 }
 
-interface Props {
+interface IErrorPageProps {
 
 }
 
-const ErrorPage: FC<Props> = () => {
+const ErrorPage: FC<IErrorPageProps> = () => {
   const navigate = useNavigate();
   const error = useRouteError() as Error;
   const message = error.message || "Something went wrong...";
