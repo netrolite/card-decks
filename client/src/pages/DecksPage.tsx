@@ -158,13 +158,13 @@ interface IDecksProps {
 
 const Decks: FC<IDecksProps> = ({ decksNodes }) => {
   return (
-    <div className={`decks${decksNodes.length ? "" : " no-decks"}`}>
+    <ul className={`decks${decksNodes.length ? "" : " no-decks"}`}>
       {
         decksNodes.length
         ? decksNodes
         : "You have not created any decks yet"
       }
-    </div>
+    </ul>
   )
 }
 
@@ -177,12 +177,12 @@ interface IDeckNodeProps {
 
 const DeckNode: FC<IDeckNodeProps> = ({ name, createdBy, createdAt, _id }) => {
   return (
-    <Link to={`/decks/${_id}`}>
-      <div className="deck">
+    <li className="deck">
+      <Link to={`/decks/${_id}`}>
         <div className="name">{name}</div>
         <div className="created-by">Created by {createdBy}</div>
         <div className="created-at">Created on {createdAt}</div>
-      </div>
-    </Link>
+      </Link>
+    </li>
   )
 }
