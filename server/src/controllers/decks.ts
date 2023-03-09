@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Deck from "../models/Deck";
-import { NotFoundErr } from "../utils/errors";
+import { NotFoundErr } from "../utils/errs";
 
 export async function getDecks(req: Request, res: Response) {
   const decks = await Deck.find({});

@@ -3,7 +3,7 @@ import { useState, useEffect, FormEvent, FC } from "react";
 import axios from "axios";
 import formatDateString from "../utils/formatDateString";
 import copyObj from "../utils/copyObj";
-import { IErrState } from "./ErrorPage";
+import { IErrState } from "./ErrPage";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Link } from "react-router-dom";
 
@@ -19,9 +19,9 @@ export interface IDeck {
 
 const DecksPage = () => {
   const [decks, setDecks] = useState<IDeck[]>([]);
-  const [error, setError] = useState<IErrState>({ occurred: false });
+  const [err, setErr] = useState<IErrState>({ occurred: false });
   const [hasLoaded, setHasLoaded] = useState(false);
-  if (error.occurred) throw new Error(error.message);
+  if (err.occurred) throw new Error(err.msg);
 
   useEffect(() => { loadDecks() }, []);
   
@@ -48,10 +48,12 @@ const DecksPage = () => {
       setDecks(decks.reverse());
       setHasLoaded(true);
     } catch (err) {
-      setError({ occurred: true, message: "Could not load decks" });
+      setErr({ occurred: true, msg: "Could not load decks" });
     }
   }
 }
+
+export default DecksPage;
 
 
 interface INewDeckFormProps {
@@ -63,15 +65,21 @@ interface IFormData {
   createdBy: string
 }
 
+interface IFormErr {
+  show: boolean,
+  msg: string
+}
+
 const NewDeckForm: FC<INewDeckFormProps> = ({ setDecks }) => {
   const [formData, setFormData] = useState<IFormData>({ name: "", createdBy: "" });
-  const [error, setError] = useState<IErrState>({ occurred: false });
-  if (error.occurred) throw new Error(error.message);
+  const [formErr, setFormErr] = useState<IFormErr>({ show: false, msg: "" });
+  const [err, setErr] = useState<IErrState>({ occurred: false });
+  if (err.occurred) throw new Error(err.msg);
 
   return (
     <form
       className="add-deck-form"
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       <div className="input-group">
         <label htmlFor="name">Deck name</label>
@@ -81,7 +89,7 @@ const NewDeckForm: FC<INewDeckFormProps> = ({ setDecks }) => {
           id="name"
           autoComplete="off"
           value={formData.name}
-          onChange={handleChange}
+          onChange={onChange}
         />
       </div>
       <div className="input-group">
@@ -91,24 +99,37 @@ const NewDeckForm: FC<INewDeckFormProps> = ({ setDecks }) => {
           name="createdBy"
           id="created-by"
           value={formData.createdBy}
-          onChange={handleChange}
+          onChange={onChange}
         />
+      </div>
+      <div className="form-err">
+        {formErr.show && formErr.msg}
       </div>
       <button className="btn primary" type="submit">Add deck</button>
     </form>
   )
 
-  function handleChange(e: FormEvent) {
+  function onChange(e: FormEvent) {
     const changedProp = (e.target as HTMLInputElement).name;
     const value = (e.target as HTMLInputElement).value;
     setFormData(prev => ({ ...prev, [changedProp]: value }));
   }
 
-  async function handleSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!isFormDataValid()) {
+      const msg = "Form filled out incorrectly";
+      return setFormErr({ show: true, msg: msg });
+    }
+    setFormErr({ show: false, msg: "" });
     const deck = await postDeck();
     if (deck) addPostedDeckToDecksState(deck);
     clearForm();
+  }
+
+  function isFormDataValid() {
+    const values = Object.values(formData);
+    return values.every(val => val !== "");
   }
 
   async function postDeck() {
@@ -116,7 +137,7 @@ const NewDeckForm: FC<INewDeckFormProps> = ({ setDecks }) => {
       const { data: deck } = await axios.post<IDeck>("/decks", formData);
       return deck;
     } catch (err) {
-      setError({ occurred: true, message: "Could not send data to the server" })
+      setErr({ occurred: true, msg: "Could not send data to the server" })
     }
   }
 
@@ -128,6 +149,7 @@ const NewDeckForm: FC<INewDeckFormProps> = ({ setDecks }) => {
     setFormData({ name: "", createdBy: "" });
   }
 }
+
 
 
 interface IDecksProps {
@@ -164,5 +186,3 @@ const DeckNode: FC<IDeckNodeProps> = ({ name, createdBy, createdAt, _id }) => {
     </Link>
   )
 }
-
-export default DecksPage;

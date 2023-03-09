@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { IDeck } from "./DecksPage";
-import { IErrState } from "./ErrorPage";
+import { IErrState } from "./ErrPage";
 import Dialog from "../components/Dialog";
 import BtnWithTooltip from "../components/BtnWithTooltip";
 import { BsTrash3 as TrashIcon } from "react-icons/bs";
@@ -17,8 +17,8 @@ interface IDeckPageProps {
 
 const DeckPage: FC<IDeckPageProps> = () => {
   const [deck, setDeck] = useState<IDeck>();
-  const [error, setError] = useState<IErrState>({ occurred: false });
-  if (error.occurred) throw new Error(error.message);
+  const [err, setErr] = useState<IErrState>({ occurred: false });
+  if (err.occurred) throw new Error(err.msg);
   const {deckId} = useParams();
 
   useEffect(() => { loadDeck() }, []);
@@ -41,7 +41,7 @@ const DeckPage: FC<IDeckPageProps> = () => {
       if (!deck) throw new Error();
       setDeck(deck);
     } catch (err) {
-      setError({ occurred: true, message: "Could not load deck" });
+      setErr({ occurred: true, msg: "Could not load deck" });
     }
   }
 }
@@ -57,8 +57,8 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [isDeleteDialogActive, setIsDeleteDialogActive] = useState(false);
-  const [error, setError] = useState<IErrState>({ occurred: false });
-  if (error.occurred) throw new Error(error.message);
+  const [err, setErr] = useState<IErrState>({ occurred: false });
+  if (err.occurred) throw new Error(err.msg);
 
   return (
     <header className="deck-header">
@@ -86,7 +86,7 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
       await axios.delete(`decks/${deckId}`);
       navigate("/decks");
     } catch (err) {
-      setError({ occurred: true, message: "Could not delete deck" });
+      setErr({ occurred: true, msg: "Could not delete deck" });
     }
   }
 

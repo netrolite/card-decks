@@ -18,6 +18,11 @@
   margin-bottom: 5px;
 }
 
+.form-err {
+  color: var(--text-red);
+  font-weight: bold;
+}
+
 .decks {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

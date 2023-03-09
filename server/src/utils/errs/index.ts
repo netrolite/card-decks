@@ -4,7 +4,7 @@ import ForbiddenErr from "./ForbiddenErr";
 import NotFoundErr from "./NotFoundErr";
 import InternalServerErr from "./InternalServerErr";
 
-export type TApiErrors = BadRequestErr | UnauthorizedErr | ForbiddenErr | NotFoundErr | InternalServerErr;
+export type TApiErrs = BadRequestErr | UnauthorizedErr | ForbiddenErr | NotFoundErr | InternalServerErr;
 
 export {
   BadRequestErr,

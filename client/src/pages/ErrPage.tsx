@@ -4,17 +4,17 @@ import { AiOutlineArrowLeft as BackArrow } from "react-icons/ai";
 
 export interface IErrState {
   occurred: boolean,
-  message?: string
+  msg?: string
 }
 
-interface IErrorPageProps {
+interface IErrPageProps {
 
 }
 
-const ErrorPage: FC<IErrorPageProps> = () => {
+const ErrPage: FC<IErrPageProps> = () => {
   const navigate = useNavigate();
-  const error = useRouteError() as Error;
-  const message = error.message || "Something went wrong...";
+  const err = useRouteError() as Error;
+  const message = err.message || "Something went wrong...";
 
   return (
     <>
@@ -30,4 +30,4 @@ const ErrorPage: FC<IErrorPageProps> = () => {
   )
 }
 
-export default ErrorPage;
+export default ErrPage;

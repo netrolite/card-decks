@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { TApiErrors } from "../utils/errors";
-import ApiErr, { Statuses } from "../utils/errors/ApiErr";
+import { TApiErrs } from "../utils/errs";
+import ApiErr, { Statuses } from "../utils/errs/ApiErr";
 import { MongoError } from "mongodb";
 
-type TError = TApiErrors | Error | MongoError;
+type TErr = TApiErrs | Error | MongoError;
 type TMongoErrCode = number | string | undefined;
 
 interface IMongoDuplicateErr {
@@ -27,12 +27,12 @@ export default class ErrHandler {
   private constructor() {};
 
   private static errObject: IErrObject = { message: "" }
-  private static err: TApiErrors | Error | MongoError;
+  private static err: TApiErrs | Error | MongoError;
   private static statusCode: Statuses = Statuses.InternalServer;
   private static mongoErrCode: TMongoErrCode;
 
   static handle(
-    err: TError,
+    err: TErr,
     req: Request,
     res: Response,
     next: NextFunction
@@ -42,7 +42,7 @@ export default class ErrHandler {
     ErrHandler.sendErr(res);
   }
 
-  private static setupStaticProperties(err: TError) {
+  private static setupStaticProperties(err: TErr) {
     ErrHandler.err = err;
     ErrHandler.errObject = { message: ErrHandler.err.message };
     ErrHandler.statusCode = Statuses.InternalServer;
@@ -57,7 +57,7 @@ export default class ErrHandler {
   }
 
   private static handleApiErr() {
-    ErrHandler.statusCode = ((ErrHandler.err as TApiErrors).status);
+    ErrHandler.statusCode = ((ErrHandler.err as TApiErrs).status);
   }
 
   private static handleMongoErr() {
