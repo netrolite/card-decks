@@ -19,8 +19,10 @@ export default function timeElapsedSinceDate(date: Date) {
 
   for (const timeUnit in secondsPerTimeUnit) {
     const timeUnitsElapsed = Math.floor(secondsElapsed / secondsPerTimeUnit[timeUnit]);
+
     if (timeUnitsElapsed > 0) {
       return `${timeUnitsElapsed} ${timeUnit + (timeUnitsElapsed > 1 ? "s" : "")}`;
     }
   }
+  return "0 seconds";
 }

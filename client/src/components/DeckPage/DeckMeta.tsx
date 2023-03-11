@@ -1,7 +1,6 @@
 import { FC } from "react"
 import formatDateStringVerbose from "../../utils/formatDateStringVerbose"
 import timeElapsedSinceDate from "../../utils/timeElapsedSinceDate"
-import { hasBeenUpdated } from "./helperFns"
 
 interface IDeckMetaProps {
   createdBy: string,
@@ -51,7 +50,27 @@ const UpdatedAt: FC<IUpdatedAtProps> = ({ createdAt, updatedAt }) => {
   }
   
   const timeElapsedSinceUpdate = timeElapsedSinceDate(updatedAtDate);
+
+  if (isLessThatMinuteAgo(timeElapsedSinceUpdate)) {
+    return <div>Updated less than a minute ago</div>
+  }
+
   return (
     <div>Updated {timeElapsedSinceUpdate} ago</div>
   )
+}
+
+function hasBeenUpdated(createdAtMs: number, updatedAtMs: number) {
+  const now = Date.now();
+  return (updatedAtMs > createdAtMs) && (now > updatedAtMs);
+}
+
+function isLessThatMinuteAgo(timeElapsed: string) {
+  const elapsed = Number(timeElapsed.split(" ")[0]);
+  const timeUnit = timeElapsed.split(" ")[1];
+
+  if (timeUnit.startsWith("second") && elapsed < 60) {
+    return true;
+  }
+  return false;
 }
