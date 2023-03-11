@@ -10,6 +10,10 @@ const DeckSchema = new mongoose.Schema({
   createdBy: {
     type: String,
     required: true
+  },
+  content: {
+    type: String,
+    default: ""
   }
 }, {
   timestamps: true

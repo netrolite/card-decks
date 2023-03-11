@@ -18,6 +18,17 @@ export async function postDeck(req: Request, res: Response) {
   res.status(200).json(deck);
 }
 
+export async function patchDeck(req: Request, res: Response) {
+  const { deckId } = req.params;
+
+  const updatedDeck = await Deck.findOneAndUpdate(
+    { _id: deckId }, req.body, { new: true, runValidators: true }
+  )
+
+  if (!updatedDeck) throw new NotFoundErr("deck not found");
+  res.json(updatedDeck);
+}
+
 export async function deleteDeck(req: Request, res: Response) {
   const { deckId } = req.params;
   const result = await Deck.deleteOne({ _id: deckId });
