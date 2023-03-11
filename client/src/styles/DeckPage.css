@@ -31,3 +31,30 @@
 .deck-page .deck-name {
   word-break: break-all;
 }
+
+.deck-editor {
+  margin-top: 30px;
+  overflow: visible;
+  outline: none;
+  resize: none;
+  border: 2px solid white;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+.deck-editor:focus {
+  box-shadow: 0px 0px 5px 5px #686868;
+}
+
+.deck-editor::before {
+  content: attr(data-placeholder);
+  color: var(--gray);
+  font-style: italic;
+}

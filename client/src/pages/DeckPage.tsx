@@ -7,6 +7,7 @@ import { IDeck } from "..";
 import { IErrState } from "./ErrPage";
 import DeckHeader from "../components/DeckPage/DeckHeader";
 import DeckMeta from "../components/DeckPage/DeckMeta";
+import DeckEditor from "../components/DeckPage/DeckEditor";
 
 interface IDeckPageProps {
 
@@ -16,7 +17,7 @@ const DeckPage: FC<IDeckPageProps> = () => {
   const [deck, setDeck] = useState<IDeck>();
   const [err, setErr] = useState<IErrState>({ occurred: false });
   if (err.occurred) throw new Error(err.msg);
-  const {deckId} = useParams();
+  const { deckId } = useParams();
 
   useEffect(() => { loadDeck() }, []);
   
@@ -29,6 +30,7 @@ const DeckPage: FC<IDeckPageProps> = () => {
         createdBy={deck.createdBy}
         updatedAt={deck.updatedAt}
       />
+      <DeckEditor initContent={deck.content} />
     </>
   )
 

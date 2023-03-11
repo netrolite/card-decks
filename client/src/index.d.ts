@@ -3,5 +3,6 @@ export interface IDeck {
   createdBy: string,
   createdAt: string,
   updatedAt: string,
-  _id: string
+  _id: string,
+  content: string
 }
