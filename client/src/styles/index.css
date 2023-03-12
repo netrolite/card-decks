@@ -113,8 +113,7 @@ textarea {
   border-radius: 5px;
 }
 
-.btn-tooltip:hover::after {
-  pointer-events: all;
+.btn-tooltip:not(:disabled):hover::after {
   opacity: 1;
 }
 
