@@ -1,6 +1,6 @@
 import "../styles/DeckPage.css";
 import axios from "axios";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { IDeck } from "..";
@@ -15,9 +15,10 @@ interface IDeckPageProps {
 
 const DeckPage: FC<IDeckPageProps> = () => {
   const [deck, setDeck] = useState<IDeck>();
+  const { deckId } = useParams();
+  
   const [err, setErr] = useState<IErrState>({ occurred: false });
   if (err.occurred) throw new Error(err.msg);
-  const { deckId } = useParams();
 
   useEffect(() => { loadDeck() }, []);
   

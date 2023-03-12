@@ -14,6 +14,7 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [isDeleteDialogActive, setIsDeleteDialogActive] = useState(false);
+
   const [err, setErr] = useState<IErrState>({ occurred: false });
   if (err.occurred) throw new Error(err.msg);
 
@@ -22,18 +23,17 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
 
       <h1 className="deck-name">{name}</h1>
       <div className="deck-actions">
-        <BtnWithTooltip tooltipText="Delete" onClick={openDeleteDialog}>
+        <BtnWithTooltip tooltipText="Delete" onClick={() => setIsDeleteDialogActive(true)}>
           <TrashIcon />
         </BtnWithTooltip>
       </div>
       <Dialog
         isActive={isDeleteDialogActive}
+        setIsActive={setIsDeleteDialogActive}
         title="This deck will be permanently deleted"
-        primaryButton="Cancel"
-        secondaryButton="Delete"
-        onPrimaryButtonClick={closeDeleteDialog}
-        onSecondaryButtonClick={deleteDeck}
-        isSecondaryButtonDangerous={true}
+        okButtonText="Delete"
+        onOk={deleteDeck}
+        useRedBgColorForOkButton={true}
       />
     </header>
   )
@@ -45,14 +45,6 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
     } catch (err) {
       setErr({ occurred: true, msg: "Could not delete deck" });
     }
-  }
-
-  function openDeleteDialog() {
-    setIsDeleteDialogActive(true);
-  }
-
-  function closeDeleteDialog() {
-    setIsDeleteDialogActive(false);
   }
 }
 

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ChangeEvent, FC, FormEventHandler, RefObject, SyntheticEvent, useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { IErrState } from "../../pages/ErrPage";
 
 interface IDeckEditorProps {
@@ -9,18 +9,22 @@ interface IDeckEditorProps {
 
 const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
   const { deckId } = useParams();
-  const msToWaitBeforeSaving = 1000;
+  const saveIntervalMs = 1000;
 
   const [content, setContent] = useState(initContent);
   const [lastSavedContent, setLastSavedContent] = useState(initContent);
-  const [msSinceLastChange, setMsSinceLastChange] = useState(0);
+
+  // for getting the latest values in setInterval callbacks (stale state)
+  const contentRef = useRef("");
+  const lastSavedContentRef = useRef("");
+  contentRef.current = content;
+  lastSavedContentRef.current = lastSavedContent;
 
   const [err, setErr] = useState<IErrState>({ occurred: false });
   if (err.occurred) throw new Error(err.msg);
 
-  useEffect(setIntervalToUpdateMsSinceLastChange, []);
-  useEffect(setBeforeUnloadEventListener, [msSinceLastChange]);
-  useEffect(saveIfNeeded, [msSinceLastChange])
+  useEffect(setSaveInterval, []);
+  useEffect(setBeforeUnloadEventListener, []);
   
   return (
     <textarea
@@ -32,48 +36,49 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
     
   function onChange(e: ChangeEvent<HTMLTextAreaElement>) {
     setContent(e.target.value);
-    setMsSinceLastChange(0);
   }
 
-  function setBeforeUnloadEventListener() {
-    window.addEventListener("beforeunload", showAlertIfNotSaved);
-    return () => window.removeEventListener("beforeunload", showAlertIfNotSaved);
-
-    function showAlertIfNotSaved(e: BeforeUnloadEvent) {
-      if (content !== lastSavedContent) {
-        save();
-        // e.returnValue = "" is a convention. Browsers ignore it and show a generic message
-        e.preventDefault(); // MDN says to prevent default, but it seems to do nothing...
-        e.returnValue = ""; // show alert
-      }
-    }
-
-  }
-
-  function setIntervalToUpdateMsSinceLastChange(intervalMs: number = 50) {
-    const interval = setInterval(() => {
-      setMsSinceLastChange(prevTime => prevTime += intervalMs);
-    }, intervalMs)
-
+  function setSaveInterval() {
+    const interval = setInterval(async () => {
+      const content = contentRef.current;
+      const lastSavedContent = lastSavedContentRef.current;
+      await saveIfContentDiffers(content, lastSavedContent);
+    }, saveIntervalMs);
     return () => clearInterval(interval);
   }
 
-  function saveIfNeeded() {
-    (async () => {
-      if (msSinceLastChange < msToWaitBeforeSaving) return;
-      if (content === lastSavedContent) return;
-      save();
-    })();
+  async function saveIfContentDiffers(content: string, lastSavedContent: string) {
+    if (content === lastSavedContent) return;
+    await save(content, lastSavedContent);
   }
-  
-  async function save() {
+
+  async function save(content: string, lastSavedContent: string) {
     try {
       console.log("saving...");
       await axios.patch(`decks/${deckId}`, { content });
+      console.log("saved!");
       setLastSavedContent(content);
     } catch (err) {
       setErr({ occurred: true, msg: "Could not save the content" });
     }
+  }
+
+  function setBeforeUnloadEventListener() {
+    window.addEventListener("beforeunload", cb);
+    return () => window.removeEventListener("beforeunload", cb);
+
+    function cb(e: BeforeUnloadEvent) {
+      const content = contentRef.current;
+      const lastSavedContent = lastSavedContentRef.current;
+
+      if (content !== lastSavedContent) {
+        save(content, lastSavedContent);
+        e.preventDefault(); // MDN says to prevent default, but it seems to do nothing...
+        // e.returnValue = "" is a convention. Browsers ignore it and show a generic message instead
+        e.returnValue = ""; // show alert
+      }
+    }
+
   }
 }
 
