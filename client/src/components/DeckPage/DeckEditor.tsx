@@ -9,7 +9,7 @@ interface IDeckEditorProps {
 
 const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
   const { deckId } = useParams();
-  const saveIntervalMs = 1000;
+  const saveIntervalMs = 2000;
 
   const [content, setContent] = useState(initContent);
   const [lastSavedContent, setLastSavedContent] = useState(initContent);
@@ -25,6 +25,7 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
 
   useEffect(setSaveInterval, []);
   useEffect(setBeforeUnloadEventListener, []);
+  useEffect(setHotkeys, []);
   
   return (
     <textarea
@@ -40,24 +41,22 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
 
   function setSaveInterval() {
     const interval = setInterval(async () => {
-      const content = contentRef.current;
-      const lastSavedContent = lastSavedContentRef.current;
-      await saveIfContentDiffers(content, lastSavedContent);
+      await saveIfContentDiffers();
     }, saveIntervalMs);
     return () => clearInterval(interval);
   }
 
-  async function saveIfContentDiffers(content: string, lastSavedContent: string) {
-    if (content === lastSavedContent) return;
-    await save(content, lastSavedContent);
+  async function saveIfContentDiffers() {
+    if (contentRef.current === lastSavedContentRef.current) return;
+    await save();
   }
 
-  async function save(content: string, lastSavedContent: string) {
+  async function save() {
     try {
       console.log("saving...");
-      await axios.patch(`decks/${deckId}`, { content });
+      await axios.patch(`decks/${deckId}`, { content: contentRef.current });
       console.log("saved!");
-      setLastSavedContent(content);
+      setLastSavedContent(contentRef.current);
     } catch (err) {
       setErr({ occurred: true, msg: "Could not save the content" });
     }
@@ -68,17 +67,26 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
     return () => window.removeEventListener("beforeunload", cb);
 
     function cb(e: BeforeUnloadEvent) {
-      const content = contentRef.current;
-      const lastSavedContent = lastSavedContentRef.current;
-
-      if (content !== lastSavedContent) {
-        save(content, lastSavedContent);
+      if (contentRef.current !== lastSavedContentRef.current) {
+        save();
         e.preventDefault(); // MDN says to prevent default, but it seems to do nothing...
         // e.returnValue = "" is a convention. Browsers ignore it and show a generic message instead
         e.returnValue = ""; // show alert
       }
     }
 
+  }
+
+  function setHotkeys() {
+    window.addEventListener("keydown", cb);
+    return () => window.removeEventListener("keydown", cb);
+
+    function cb(e: KeyboardEvent) {
+      if ((e.metaKey && e.key === "s") || (e.ctrlKey && e.key === "s")) {
+        e.preventDefault();
+        saveIfContentDiffers();
+      }
+    }
   }
 }
 
