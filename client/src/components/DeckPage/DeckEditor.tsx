@@ -51,7 +51,6 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
 
   async function saveIfNeeded() {
     if (contentRef.current === lastSavedContentRef.current) return;
-    console.log(isSavingRef.current);
     if (isSavingRef.current) return;
     await save();
   }
