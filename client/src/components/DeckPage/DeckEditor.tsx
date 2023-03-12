@@ -30,7 +30,7 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent, isSaving, setIsSaving }
   useEffect(setSaveInterval, []);
   useEffect(setBeforeUnloadEventListener, []);
   useEffect(setHotkeys, []);
-  
+
   return (
     <textarea
       className="deck-editor"

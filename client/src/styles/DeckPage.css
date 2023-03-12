@@ -4,13 +4,10 @@
   color: gray;
 }
 
-.deck-page.loading {
-  height: 400px;
-}
-
 .deck-header {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .deck-is-saving-indicator {
@@ -19,6 +16,15 @@
   color: var(--gray);
   position: absolute;
   top: 15px;
+}
+
+.deck-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.deck-actions > * {
+  align-self: flex-start;
 }
 
 .deck-header .btn.danger {
@@ -32,12 +38,29 @@
   color: white;
 }
 
-.deck-page .deck-actions {
-  padding-left: 10px;
+.deck-name-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 15px;
 }
 
-.deck-page .deck-name {
+.deck-name-editing-textarea {
+  background-color: transparent;
+  color: var(--light);
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid var(--gray);
+  resize: none;
+  font-size: 2rem;
+}
+
+.deck-name {
   word-break: break-all;
+}
+
+.deck-name-save-btn {
+  align-self: flex-start;
 }
 
 .deck-editor {
@@ -49,20 +72,12 @@
   padding: 15px;
   width: 100%;
   height: 100%;
-  min-height: 100dvh;
+  min-height: 75vh;
   border-radius: 5px;
-  font-family: inherit;
-  font-size: 1rem;
   background-color: var(--dark);
   color: var(--light);
 }
 
 .deck-editor:focus {
   box-shadow: 0px 0px 5px 5px #686868;
-}
-
-.deck-editor::before {
-  content: attr(data-placeholder);
-  color: var(--gray);
-  font-style: italic;
 }

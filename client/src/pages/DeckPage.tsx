@@ -27,7 +27,11 @@ const DeckPage: FC<IDeckPageProps> = () => {
   if (!deck) return <LoadingSpinner />
   return (
     <>
-      <DeckHeader name={deck.name} isSaving={isSaving} />
+      <DeckHeader
+        initDeckName={deck.name}
+        isSaving={isSaving}
+        setIsSaving={setIsSaving}
+      />
       <DeckMeta
         createdAt={deck.createdAt}
         createdBy={deck.createdBy}
