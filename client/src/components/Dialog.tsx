@@ -73,6 +73,8 @@ const Dialog: FC<Props> = ({
       
       if (e.key === "Escape") {
         closeDialog();
+      } else if (e.key === "Enter") {
+        onOk();
       }
     }
   }
