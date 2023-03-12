@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Deck from "../models/Deck";
-import { NotFoundErr } from "../utils/errs";
+import { BadRequestErr, NotFoundErr } from "../utils/errs";
 
 export async function getDecks(req: Request, res: Response) {
   const decks = await Deck.find({});
@@ -9,7 +9,11 @@ export async function getDecks(req: Request, res: Response) {
 
 export async function getDeckById(req: Request, res: Response) {
   const { deckId } = req.params;
+  if (deckId.length !== 24) {
+    throw new BadRequestErr("ID must be 24 characters long");
+  }
   const result = await Deck.findById(deckId);
+  if (!result) throw new NotFoundErr("Deck not found");
   res.status(200).json(result);
 }
 

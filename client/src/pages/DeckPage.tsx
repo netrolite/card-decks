@@ -1,5 +1,5 @@
 import "../styles/DeckPage.css";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { FC, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -51,7 +51,7 @@ const DeckPage: FC<IDeckPageProps> = () => {
       if (!deck) throw new Error();
       setDeck(deck);
     } catch (err) {
-      setErr({ occurred: true, msg: "Could not load deck" });
+      setErr({ occurred: true, msg: "Could not load the deck. Make sure it exists!" });
     }
   }
 }
