@@ -2,15 +2,17 @@ import { FC, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IErrState } from "../../pages/ErrPage";
 import BtnWithTooltip from "../BtnWithTooltip";
-import { BsTrash3 as TrashIcon } from "react-icons/bs";
 import Dialog from "../Dialog";
 import axios from "axios";
+import { BsTrash3 as TrashIcon } from "react-icons/bs";
+import DeckIsSavingIndicator from "./DeckIsSavingIndicator";
 
 interface IDeckHeaderProps {
   name: string
+  isSaving: boolean
 }
 
-const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
+const DeckHeader: FC<IDeckHeaderProps> = ({ name, isSaving }) => {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [isDeleteDialogActive, setIsDeleteDialogActive] = useState(false);
@@ -20,6 +22,7 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ name }) => {
 
   return (
     <header className="deck-header">
+      <DeckIsSavingIndicator isSaving={isSaving} />
 
       <h1 className="deck-name">{name}</h1>
       <div className="deck-actions">

@@ -13,6 +13,14 @@
   justify-content: space-between;
 }
 
+.deck-is-saving-indicator {
+  display: flex;
+  gap: 5px;
+  color: var(--gray);
+  position: absolute;
+  top: 15px;
+}
+
 .deck-header .btn.danger {
   background-color: var(--light);
   color: var(--dark);

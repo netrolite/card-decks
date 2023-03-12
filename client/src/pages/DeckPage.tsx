@@ -14,8 +14,10 @@ interface IDeckPageProps {
 }
 
 const DeckPage: FC<IDeckPageProps> = () => {
-  const [deck, setDeck] = useState<IDeck>();
   const { deckId } = useParams();
+
+  const [deck, setDeck] = useState<IDeck>();
+  const [isSaving, setIsSaving] = useState(false);
   
   const [err, setErr] = useState<IErrState>({ occurred: false });
   if (err.occurred) throw new Error(err.msg);
@@ -25,13 +27,17 @@ const DeckPage: FC<IDeckPageProps> = () => {
   if (!deck) return <LoadingSpinner />
   return (
     <>
-      <DeckHeader name={deck.name} />
+      <DeckHeader name={deck.name} isSaving={isSaving} />
       <DeckMeta
         createdAt={deck.createdAt}
         createdBy={deck.createdBy}
         updatedAt={deck.updatedAt}
       />
-      <DeckEditor initContent={deck.content} />
+      <DeckEditor
+        initContent={deck.content}
+        isSaving={isSaving}
+        setIsSaving={setIsSaving}
+      />
     </>
   )
 

@@ -4,16 +4,17 @@ import { useParams } from "react-router-dom";
 import { IErrState } from "../../pages/ErrPage";
 
 interface IDeckEditorProps {
-  initContent: string
+  initContent: string,
+  isSaving: boolean,
+  setIsSaving: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
+const DeckEditor: FC<IDeckEditorProps> = ({ initContent, isSaving, setIsSaving }) => {
   const { deckId } = useParams();
-  const saveIntervalMs = 2000;
+  const saveIntervalMs = 1000;
 
   const [content, setContent] = useState(initContent);
   const [lastSavedContent, setLastSavedContent] = useState(initContent);
-  const [isSaving, setIsSaving] = useState(false);
 
   // for getting the latest values in setInterval callbacks (stale state)
   const contentRef = useRef("");
