@@ -13,12 +13,15 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
 
   const [content, setContent] = useState(initContent);
   const [lastSavedContent, setLastSavedContent] = useState(initContent);
+  const [isSaving, setIsSaving] = useState(false);
 
   // for getting the latest values in setInterval callbacks (stale state)
   const contentRef = useRef("");
   const lastSavedContentRef = useRef("");
+  const isSavingRef = useRef<boolean>()
   contentRef.current = content;
   lastSavedContentRef.current = lastSavedContent;
+  isSavingRef.current = isSaving;
 
   const [err, setErr] = useState<IErrState>({ occurred: false });
   if (err.occurred) throw new Error(err.msg);
@@ -41,20 +44,24 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
 
   function setSaveInterval() {
     const interval = setInterval(async () => {
-      await saveIfContentDiffers();
+      await saveIfNeeded();
     }, saveIntervalMs);
     return () => clearInterval(interval);
   }
 
-  async function saveIfContentDiffers() {
+  async function saveIfNeeded() {
     if (contentRef.current === lastSavedContentRef.current) return;
+    console.log(isSavingRef.current);
+    if (isSavingRef.current) return;
     await save();
   }
 
   async function save() {
     try {
       console.log("saving...");
+      setIsSaving(true);
       await axios.patch(`decks/${deckId}`, { content: contentRef.current });
+      setIsSaving(false);
       console.log("saved!");
       setLastSavedContent(contentRef.current);
     } catch (err) {
@@ -84,7 +91,7 @@ const DeckEditor: FC<IDeckEditorProps> = ({ initContent }) => {
     function cb(e: KeyboardEvent) {
       if ((e.metaKey && e.key === "s") || (e.ctrlKey && e.key === "s")) {
         e.preventDefault();
-        saveIfContentDiffers();
+        saveIfNeeded();
       }
     }
   }
