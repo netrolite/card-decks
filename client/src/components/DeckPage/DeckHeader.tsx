@@ -19,6 +19,7 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ initDeckName, isSaving, setIsSaving 
   const navigate = useNavigate();
 
   const [deckName, setDeckName] = useState(initDeckName);
+  const [lastSavedDeckName, setLastSavedDeckName] = useState(initDeckName);
   const [isDeleteDialogActive, setIsDeleteDialogActive] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
 
@@ -84,9 +85,10 @@ const DeckHeader: FC<IDeckHeaderProps> = ({ initDeckName, isSaving, setIsSaving 
     setIsEditingName(false);
     try {
       setIsSaving(true);
-      if (deckName !== initDeckName) {
+      if (deckName !== lastSavedDeckName) {
         await axios.patch(`/decks/${deckId}`, { name: deckName });
       };
+      setLastSavedDeckName(deckName);
       setIsSaving(false);
     } catch (err) {
       setErr({ occurred: true, msg: "Could not update deck" });
